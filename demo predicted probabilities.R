@@ -120,6 +120,7 @@ probabilities <-
                              "Juggler",
                              "Side hustler")))
 
+
 younger <- 
   probabilities %>%
   filter(Outcome != "One creative job") %>% 
@@ -158,3 +159,124 @@ older <-
   xlim(0, .21)
 
 younger / older
+
+
+probabilities_2 <- 
+  data.frame(
+  stringsAsFactors = FALSE,
+             Outcome = c("One creative job",
+                         "One creative job","One creative job","One creative job",
+                         "One creative job","One creative job",
+                         "One creative job","One creative job","Portfolio","Portfolio",
+                         "Portfolio","Portfolio","Portfolio","Portfolio",
+                         "Portfolio","Portfolio","Juggler","Juggler","Juggler",
+                         "Juggler","Juggler","Juggler","Juggler","Juggler",
+                         "Side hustler","Side hustler","Side hustler",
+                         "Side hustler","Side hustler","Side hustler","Side hustler",
+                         "Side hustler"),
+              Gender = c("Male","Male","Male",
+                         "Male","Female","Female","Female","Female","Male",
+                         "Male","Male","Male","Female","Female","Female",
+                         "Female","Male","Male","Male","Male","Female",
+                         "Female","Female","Female","Male","Male","Male","Male",
+                         "Female","Female","Female","Female"),
+              Degree = c("No degree","No degree",
+                         "Degree","Degree","No degree","No degree","Degree",
+                         "Degree","No degree","No degree","Degree","Degree",
+                         "No degree","No degree","Degree","Degree",
+                         "No degree","No degree","Degree","Degree","No degree",
+                         "No degree","Degree","Degree","No degree","No degree",
+                         "Degree","Degree","No degree","No degree","Degree",
+                         "Degree"),
+           Ethnicity = c("White","PoC","White",
+                         "PoC","White","PoC","White","PoC","White","PoC",
+                         "White","PoC","White","PoC","White","PoC","White",
+                         "PoC","White","PoC","White","PoC","White","PoC",
+                         "White","PoC","White","PoC","White","PoC","White",
+                         "PoC"),
+                Pred = c(0.8190453,0.7980665,
+                         0.8366574,0.8260083,0.8196789,0.78341,0.8474267,
+                         0.8202773,0.0099616,1.19e-11,0.012405,1.5e-11,0.0023857,
+                         2.73e-12,0.0030169,3.49e-12,0.0524269,0.0454627,
+                         0.0607899,0.0534355,0.0311448,0.0264149,0.0365806,
+                         0.0314274,0.1185662,0.1564708,0.0901477,0.1205562,
+                         0.1467906,0.1901751,0.1129758,0.1482953),
+                  SE = c(0.0010258,0.0019805,
+                         0.0007554,0.0016541,0.0011589,0.0021379,0.0007545,
+                         0.0016193,0.0003305,1.67e-08,0.0002334,2.12e-08,
+                         0.0001159,3.84e-09,0.0001151,4.93e-09,0.0006154,0.0010305,
+                         0.00051,0.0010873,0.000455,0.0006396,0.0003926,
+                         0.0006714,0.0008332,0.0018057,0.0005667,0.0013588,
+                         0.0010956,0.0020977,0.0006636,0.0015244),
+                   z = c(798.44,402.95,1107.57,
+                         499.36,707.3,366.44,1123.13,506.55,30.14,0,53.15,
+                         0,20.59,0,26.22,0,85.2,44.12,119.18,49.15,
+                         68.45,41.3,93.18,46.81,142.31,86.65,159.09,88.72,
+                         133.98,90.66,170.25,97.28),
+                   p = c(0,0,0,0,0,0,0,0,0,
+                         0.999,0,0.999,0,0.999,0,0.999,0,0,0,0,0,0,
+                         0,0,0,0,0,0,0,0,0,0),
+                  lb = c(0.8170347,0.7941847,
+                         0.8351769,0.8227663,0.8174076,0.7792198,0.8459479,
+                         0.8171035,0.0093138,-3.27e-08,0.0119476,-4.15e-08,
+                         0.0021586,-7.53e-09,0.0027914,-9.65e-09,0.0512208,
+                         0.0434428,0.0597902,0.0513045,0.030253,0.0251613,
+                         0.0358112,0.0301115,0.1169333,0.1529316,0.0890371,
+                         0.117893,0.1446431,0.1860638,0.1116752,0.1453076),
+                  ub = c(0.8210558,0.8019483,
+                         0.838138,0.8292503,0.8219503,0.7876002,0.8489056,
+                         0.8234512,0.0106094,3.28e-08,0.0128624,4.15e-08,
+                         0.0026128,7.54e-09,0.0032424,9.66e-09,0.053633,0.0474825,
+                         0.0617896,0.0555665,0.0320366,0.0276685,0.0373501,
+                         0.0327433,0.1201992,0.16001,0.0912583,0.1232194,
+                         0.148938,0.1942865,0.1142763,0.151283)
+  )%>% 
+  filter(Outcome != "One creative job") %>% 
+  mutate(Outcome = 
+           factor(Outcome,
+                  levels = c("Portfolio",
+                             "Juggler",
+                             "Side hustler")))
+
+probabilities_2
+
+
+
+White <- 
+  probabilities_2 %>%
+  filter(Outcome != "One creative job") %>% 
+  filter(Ethnicity == "White") %>% 
+  ggplot() +
+  aes(x = Pred,
+      y = Outcome) +
+  geom_col(width = .5) +
+  geom_label(aes(label = round(Pred, 3)),
+             hjust = 0,
+             nudge_x = 0.005) +  
+  facet_grid(Degree ~ Gender) +
+  theme_minimal() +
+  labs(subtitle = "White",
+       x = "",
+       y = "") +
+  theme(axis.text.x = element_blank())+
+  xlim(0, .23)
+
+PoC <- 
+  probabilities_2 %>%
+  filter(Outcome != "One creative job") %>% 
+  filter(Ethnicity == "PoC") %>% 
+  ggplot() +
+  aes(x = Pred,
+      y = Outcome) +
+  geom_col(width = .5) +
+  geom_label(aes(label = round(Pred, 3)),
+             hjust = 0,
+             nudge_x = 0.005) +
+  facet_grid(Degree ~ Gender) +
+  theme_minimal() +
+  labs(subtitle = "People of colour",
+       x = "",
+       y = "") +
+  xlim(0, .23)
+
+White / PoC
